@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import TaskInput from './components/TaskInput';
+import TaskList from './components/TaskList';
+import './components/TaskTracker.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+
+const App = () => {
+    const [tasks, setTasks] = useState([]);
+
+    const addTask = (title) => {
+        const newTask = { title, completed: false };
+        setTasks([...tasks, newTask]);
+    };
+
+    const deleteTask = (index) => {
+        const newTasks = tasks.filter((_, i) => i !== index);
+        setTasks(newTasks);
+    };
+
+    const toggleComplete = (index) => {
+        const newTasks = tasks.map((task, i) =>
+            i === index ? { ...task, completed: !task.completed } : task
+        );
+        setTasks(newTasks);
+    };
+
+    return (
+        <div className="container">
+            <h1>Task Tracker</h1>
+            <TaskInput addTask={addTask} />
+            <TaskList tasks={tasks} deleteTask={deleteTask} toggleComplete={toggleComplete} />
+        </div>
+    );
+};
 
 export default App;
